@@ -1,20 +1,17 @@
 const prisma = require("../config/prisma");
 
 const USER_MODELS = {
-  getAllUser: async () => {
-    try {
-      const result = await prisma.users.findMany({
-        // tanpa data password
-        select: {
-          id: true,
-          name: true,
-          email: true,
-        },
-      });
-      return result;
-    } catch (error) {
-      return error;
-    }
+  getAllUser: async (where) => {
+    const result = await prisma.users.findMany({
+      // tanpa data password
+      where,
+      select: {
+        id: true,
+        name: true,
+        email: true,
+      },
+    });
+    return result;
   },
 
   getDetailUser: async (id) => {

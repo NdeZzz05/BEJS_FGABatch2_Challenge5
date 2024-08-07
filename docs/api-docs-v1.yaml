@@ -1,0 +1,1672 @@
+openapi: 3.0.0
+info:
+  title: Challenge Chapter 5 Binar
+  version: 1.0.0
+  description: Documentation API
+servers:
+  - url: http://localhost:3000/api/v1
+tags:
+  - name: users
+    description: Everything about users
+  - name: accounts
+    description: Everything about accounts
+  - name: transactions
+    description: Everything about transactions
+
+paths:
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get all users
+      parameters:
+        - in: query
+          name: name
+          example: "Fernandes"
+          schema:
+            type: string
+          description: |
+            * Filter by name users
+      responses:
+        "200":
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/getUserResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+    post:
+      tags:
+        - users
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInput"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/createUserResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+  /users/{id}:
+    get:
+      tags:
+        - users
+      summary: Get a user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The user ID
+      responses:
+        "200":
+          description: Details user
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/createUserResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+    put:
+      tags:
+        - users
+      summary: Update a user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The user ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInput"
+      responses:
+        "200":
+          description: User updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/createUserResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+    delete:
+      tags:
+        - users
+      summary: Delete a user by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The user ID
+      responses:
+        "200":
+          description: User deleted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+  /accounts:
+    get:
+      tags:
+        - accounts
+      summary: Get all accounts
+      parameters:
+        - in: query
+          name: bank_name
+          example: "Fernandes"
+          schema:
+            type: string
+          description: |
+            * Filter by bank name account
+        - in: query
+          name: bank_account_number
+          example: 1234500000
+          schema:
+            type: string
+          description: |
+            * Filter by bank account number account
+      responses:
+        "200":
+          description: get all accounts
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/getAccountResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+    post:
+      tags:
+        - accounts
+      summary: Create a new account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AccountInput"
+      responses:
+        "201":
+          description: Account created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/getAccountResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+  /accounts/{id}:
+    get:
+      tags:
+        - accounts
+      summary: Get an account by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The account ID
+      responses:
+        "200":
+          description: Detail bank account
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/getDetailAccountResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+    put:
+      tags:
+        - accounts
+      summary: Update an account by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The account ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/updateAccountInput"
+      responses:
+        "200":
+          description: Account updated
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/getAccountResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+    delete:
+      tags:
+        - accounts
+      summary: Delete an account by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The account ID
+      responses:
+        "200":
+          description: Account deleted
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+  /transactions:
+    get:
+      tags:
+        - transactions
+      summary: Get all transactions
+      parameters:
+        - in: query
+          name: type
+          example: Transfer
+          schema:
+            type: string
+          description: |
+            * Filter by Transaction Type (Transfer/ Deposit/ Withdraw)
+        - in: query
+          name: startDate
+          example: "2024-07-26"
+          schema:
+            type: string
+          description: |
+            * Filter by Start date transaction
+        - in: query
+          name: endDate
+          example: "2024-07-30"
+          schema:
+            type: string
+          description: |
+            * Filter by End date transaction
+      responses:
+        "200":
+          description: A list of transactions
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/getTransactionResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+  /transactions/{id}:
+    get:
+      tags:
+        - transactions
+      summary: Get a transaction by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: The transaction ID
+      responses:
+        "200":
+          description: A single transaction
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/getDetailTransactionResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+  /transactions/transfer:
+    post:
+      tags:
+        - transactions
+      summary: Create a new transfer transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TransferInput"
+      responses:
+        "201":
+          description: Transfer transaction created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/TransferResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+  /transactions/deposit:
+    post:
+      tags:
+        - transactions
+      summary: Create a new deposit transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DepositInput"
+      responses:
+        "201":
+          description: Deposit transaction created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/DepositResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+  /transactions/withdraw:
+    post:
+      tags:
+        - transactions
+      summary: Create a new withdraw transaction
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WithdrawInput"
+      responses:
+        "201":
+          description: Withdraw transaction created
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/WithdrawResponse"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+components:
+  schemas:
+    basicResponse:
+      title: basicResponse
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "successfully do task"
+    ErrorResponse400:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        statusCode:
+          type: integer
+          example: 400
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Bad request"
+    ErrorResponse401:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        statusCode:
+          type: integer
+          example: 401
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Unauthorized"
+    ErrorResponse403:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        statusCode:
+          type: integer
+          example: 403
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Forbidden"
+    ErrorResponse404:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        statusCode:
+          type: integer
+          example: 404
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Resource not found"
+    ErrorResponse500:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        statusCode:
+          type: integer
+          example: 500
+        error:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Internal server error"
+    getUserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "158610b-5098-467b-b45a-05fcfdcd1288"
+        name:
+          type: string
+          example: "bagus"
+        email:
+          type: string
+          example: "bagus@gmail.com"
+
+    createUserResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Muhammad Fernandes
+        email:
+          type: string
+          example: nandes@gmail.com
+        password:
+          type: string
+          example: orangganteng
+        profile:
+          type: object
+          properties:
+            identity_type:
+              type: string
+              example: KTP
+            identity_number:
+              type: string
+              example: 32708238732
+            user_id:
+              type: string
+              example: 123123-123123-12312312
+            address_id:
+              type: string
+              example: 123123-asdhjkhg-12312
+            job_id:
+              type: string
+              example: 2asdjhj-213jkba-123jbhasd
+            address:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: 12312-asdasd-1231231
+                street:
+                  type: string
+                  example: jalan gurama raya 2
+                city:
+                  type: string
+                  example: Jakarta Selatan
+                state:
+                  type: string
+                  example: DKI Jakarta
+                postal_code:
+                  type: string
+                  example: 12345
+                country:
+                  type: string
+                  example: indonesia
+            job:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: 123123-1bsdkjfds-12312
+                company_name:
+                  type: string
+                  example: PT Lentera Bangsa
+                position:
+                  type: string
+                  example: CEO
+
+    UserInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Muhammad Fernandes
+        email:
+          type: string
+          example: nandes@gmail.com
+        password:
+          type: string
+          example: orangganteng
+        identity_type:
+          type: string
+          example: KTP
+        identity_number:
+          type: string
+          example: 32708238732
+        street:
+          type: string
+          example: jalan gurama raya 2
+        city:
+          type: string
+          example: Jakarta Selatan
+        state:
+          type: string
+          example: DKI Jakarta
+        postal_code:
+          type: string
+          example: 12345
+        country:
+          type: string
+          example: indonesia
+        company_name:
+          type: string
+          example: PT Lentera Bangsa
+        position:
+          type: string
+          example: CEO
+      required:
+        - name
+        - email
+        - password
+        - identity_type
+        - identity_number
+        - street
+        - city
+        - state
+        - postal_code
+        - country
+        - company_name
+        - position
+
+    getAccountResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 9d6ac44e-622e-45a1-a08a-748be5bf74c5
+          description: The account ID
+        bank_name:
+          type: string
+          example: Fernandes
+          description: bank name account
+        bank_account_number:
+          type: string
+          example: 1234500000
+          description: The number of bank account
+        pin:
+          type: string
+          example: 123456
+          description: The pin accounts (max 6 character)
+        balance:
+          type: number
+          format: double
+          example: 10000000000
+          description: The account balance
+        user_id:
+          type: string
+          example: e86bde8c-12e9-4d18-9eef-290fe019d5ed
+          description: The user ID associated with the account
+
+    getDetailAccountResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 9d6ac44e-622e-45a1-a08a-748be5bf74c5
+          description: The account ID
+        bank_name:
+          type: string
+          example: Fernandes
+          description: bank name account
+        bank_account_number:
+          type: string
+          example: 1234500000
+          description: The number of bank account
+        pin:
+          type: string
+          example: 123456
+          description: The pin accounts (max 6 character)
+        balance:
+          type: number
+          format: double
+          example: 10000000000
+          description: The account balance
+        user_id:
+          type: string
+          example: e86bde8c-12e9-4d18-9eef-290fe019d5ed
+          description: The user ID associated with the account
+        user:
+          type: object
+          properties:
+            id:
+              type: string
+              example: e86bde8c-12e9-4d18-9eef-290fe019d5ed
+            name:
+              type: string
+              example: fernandes
+            email:
+              type: string
+              example: "nandes@gmail.com"
+
+        transactions_source:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 5d53a99-aca8-417d-9859-05a9b4a9df1c
+              amount:
+                type: number
+                example: 100000
+              date:
+                type: string
+                format: date-time
+                example: "2023-08-01T12:34:56Z"
+              transaction_type_id:
+                type: string
+                example: 09ff41b2-fa86-4393-bbf2-f3d81f72fc17
+              source_account_id:
+                type: string
+                example: 9d6ac44e-622e-45a1-a08a-748be5bf74c5
+              destination_account_id:
+                type: string
+                example: 448268e4-3a24-4a80-a7f2-79b4a9282cdc
+
+        transactions_target:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: 5d53a99-aca8-417d-9859-05a9b4a9df1c
+              amount:
+                type: number
+                example: 100000
+              date:
+                type: string
+                format: date-time
+                example: "2023-08-01T12:34:56Z"
+              transaction_type_id:
+                type: string
+                example: 09ff41b2-fa86-4393-bbf2-f3d81f72fc17
+              source_account_id:
+                type: string
+                example: 448268e4-3a24-4a80-a7f2-79b4a9282cdc
+              destination_account_id:
+                type: string
+                example: 9d6ac44e-622e-45a1-a08a-748be5bf74c5
+
+    AccountInput:
+      type: object
+      properties:
+        bank_name:
+          type: string
+          example: Fernandes
+          description: The owner's name
+        pin:
+          type: string
+          example: 123456
+          description: The pin accounts (max 6 character)
+        balance:
+          type: number
+          example: 0
+          format: double
+          description: The account balance
+        user_id:
+          type: string
+          example: ce6197e3-ad9d-49e9-b08e-26bbfe91a49c
+          description: id user
+      required:
+        - bank_name
+        - pin
+        - balance
+        - user_id
+    updateAccountInput:
+      type: object
+      properties:
+        bank_name:
+          type: string
+          example: Fernandes
+        pin:
+          type: string
+          example: 123456
+
+    getTransactionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 05d53a99-aca8-417d-9859-05a9b4a9df1c
+          description: The transaction ID
+        amount:
+          type: number
+          format: double
+          example: 500000
+          description: The transaction amount
+        date:
+          type: string
+          format: date-time
+          description: The date the transaction was created
+        transaction_type_id:
+          type: string
+          example: 09ff41b2-fa86-4393-1231213
+          description: a
+        source_account_id:
+          type: string
+          example: 9d6ac44e-622e-45a1-a08a-748be5bf74c5
+          description: The source account for transfer transactions
+        destination_account_id:
+          type: string
+          example: 448268e4-3a24-4a80-a7f2-79b4a9282cdc
+          description: The destination account for transfer transactions
+        transaction_type:
+          type: object
+          properties:
+            id:
+              type: string
+              example: 09ff41b2-fa86-4393-1231213
+              description: a
+            name:
+              type: string
+              example: Transfer
+              description: The name of the transaction (Transfer, Deposit, Withdraw)
+
+    getDetailTransactionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 05d53a99-aca8-417d-9859-05a9b4a9df1c
+          description: The transaction ID
+        amount:
+          type: number
+          format: double
+          example: 500000
+          description: The transaction amount
+        date:
+          type: string
+          format: date-time
+          description: The date the transaction was created
+        transaction_type_id:
+          type: string
+          example: 09ff41b2-fa86-4393-1231213
+          description: a
+        source_account_id:
+          type: string
+          example: 9d6ac44e-622e-45a1-a08a-748be5bf74c5
+          description: The source account for transfer transactions
+        destination_account_id:
+          type: string
+          example: 448268e4-3a24-4a80-a7f2-79b4a9282cdc
+          description: The destination account for transfer transactions
+        transaction_type:
+          type: object
+          properties:
+            id:
+              type: string
+              example: 09ff41b2-fa86-4393-1231213
+              description: a
+            name:
+              type: string
+              example: Transfer
+              description: The name of the transaction (Transfer, Deposit, Withdraw)
+        sourceAccount:
+          type: object
+          properties:
+            id:
+              type: string
+              example: 9d6ac44e-622e-45a1-a08a-748be5bf74c5
+              description: The account ID
+            bank_name:
+              type: string
+              example: Fernandes
+              description: bank name account
+            bank_account_number:
+              type: string
+              example: 1234500000
+              description: The number of bank account
+            pin:
+              type: string
+              example: 123456
+              description: The pin accounts (max 6 character)
+            balance:
+              type: number
+              format: double
+              example: 10000000000
+              description: The account balance
+            user_id:
+              type: string
+              example: e86bde8c-12e9-4d18-9eef-290fe019d5ed
+              description: The user ID associated with the account
+        destinationAccount:
+          type: object
+          properties:
+            id:
+              type: string
+              example: 9d6ac44e-622e-45a1-a08a-748be5bf74c5
+              description: The account ID
+            bank_name:
+              type: string
+              example: Fernandes
+              description: bank name account
+            bank_account_number:
+              type: string
+              example: 1234500000
+              description: The number of bank account
+            pin:
+              type: string
+              example: 123456
+              description: The pin accounts (max 6 character)
+            balance:
+              type: number
+              format: double
+              example: 10000000000
+              description: The account balance
+            user_id:
+              type: string
+              example: e86bde8c-12e9-4d18-9eef-290fe019d5ed
+              description: The user ID associated with the account
+
+    TransferInput:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+          example: 100000
+          description: The transaction amount
+        source_account_id:
+          type: string
+          example: 448268e4-3a24-4a80-a7f2-79b4a9282cdc
+          description: The source account ID
+        destination_account_id:
+          type: string
+          example: 0f51d32a-4af1-4f10-959b-f408ae5c77b3
+          description: The destination account ID
+        transaction_type_id:
+          type: string
+          example: 09ff41b2-fa86-4393-bbf2-f3d81f72fc17
+          description: id transaction type
+      required:
+        - amount
+        - source_account_id
+        - destination_account_id
+        - transaction_type_id
+    TransferResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 05d53a99-aca8-417d-9859-05a9b4a9df1c
+          description: The transaction ID
+        amount:
+          type: number
+          format: double
+          example: 500000
+          description: The transaction amount
+        date:
+          type: string
+          format: date-time
+          description: The date the transaction was created
+        transaction_type_id:
+          type: string
+          example: 09ff41b2-fa86-4393-1231213
+          description: a
+        source_account_id:
+          type: string
+          example: 9d6ac44e-622e-45a1-a08a-748be5bf74c5
+          description: The source account for transfer transactions
+        destination_account_id:
+          type: string
+          example: 448268e4-3a24-4a80-a7f2-79b4a9282cdc
+          description: The destination account for transfer transactions
+
+    DepositInput:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+          example: 100000
+          description: The transaction amount
+        destination_account_id:
+          type: string
+          example: 0f51d32a-4af1-4f10-959b-f408ae5c77b3
+          description: The destination account ID
+        transaction_type_id:
+          type: string
+          example: 09ff41b2-fa86-4393-bbf2-f3d81f72fc17
+          description: id transaction type
+      required:
+        - amount
+        - destination_account_id
+        - transaction_type_id
+    DepositResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 05d53a99-aca8-417d-9859-05a9b4a9df1c
+          description: The transaction ID
+        amount:
+          type: number
+          format: double
+          example: 500000
+          description: The transaction amount
+        date:
+          type: string
+          format: date-time
+          description: The date the transaction was created
+        transaction_type_id:
+          type: string
+          example: 09ff41b2-fa86-4393-1231213
+          description: a
+        source_account_id:
+          type: string
+          example: null
+          description: No source account for deposit transactions
+        destination_account_id:
+          type: string
+          example: 448268e4-3a24-4a80-a7f2-79b4a9282cdc
+          description: The destination account for deposit transactions
+
+    WithdrawInput:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: double
+          example: 100000
+          description: The transaction amount
+        source_account_id:
+          type: string
+          example: 448268e4-3a24-4a80-a7f2-79b4a9282cdc
+          description: The source account ID
+        transaction_type_id:
+          type: string
+          example: 09ff41b2-fa86-4393-bbf2-f3d81f72fc17
+          description: id transaction type
+      required:
+        - amount
+        - source_account_id
+        - transaction_type_id
+    WithdrawResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 05d53a99-aca8-417d-9859-05a9b4a9df1c
+          description: The transaction ID
+        amount:
+          type: number
+          format: double
+          example: 500000
+          description: The transaction amount
+        date:
+          type: string
+          format: date-time
+          description: The date the transaction was created
+        transaction_type_id:
+          type: string
+          example: 09ff41b2-fa86-4393-1231213
+          description: a
+        source_account_id:
+          type: string
+          example: 0f51d32a-4af1-4f10-959b-f408ae5c77b3
+          description: The source account for withdraw transactions
+        destination_account_id:
+          type: string
+          example: null
+          description: No destination account for withdraw transactions

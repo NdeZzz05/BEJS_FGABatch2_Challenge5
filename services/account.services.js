@@ -1,10 +1,18 @@
-const prisma = require("../config/prisma");
 const { NotFoundError, BadRequest } = require("../errors/customsErrors");
 const ACCOUNT_MODELS = require("../models/account.models");
+const USER_MODELS = require("../models/user.models");
 
 const ACCOUNT_SERVICES = {
-  getAllAccount: async () => {
-    const result = await ACCOUNT_MODELS.getAllAccount();
+  getAllAccount: async (data) => {
+    const { bank_name, bank_account_number } = data;
+
+    const where = {};
+
+    if (bank_name) where.bank_name = { contains: bank_name, mode: "insensitive" };
+    if (bank_account_number) where.bank_account_number = bank_account_number;
+
+    const result = await ACCOUNT_MODELS.getAllAccount(where);
+
     return result;
   },
 
@@ -17,30 +25,25 @@ const ACCOUNT_SERVICES = {
   },
 
   createAccount: async (data) => {
-    if (!data.bank_name || !data.pin || data.balance === undefined || !data.user_id) {
-      throw new BadRequest("Missing required fields");
-    }
+    const { user_id } = data;
+
+    const checkUserById = await USER_MODELS.getDetailUser(user_id);
+    if (!checkUserById) throw new NotFoundError("User not found");
 
     const result = await ACCOUNT_MODELS.createAccount(data);
     return result;
   },
 
   updateAccount: async (id, data) => {
-    if (!data.bank_name || !data.pin) {
-      throw new BadRequest("Missing required fields");
-    }
+    const checkAccount = await ACCOUNT_MODELS.getDetailAccount(id);
+    if (!checkAccount) throw new NotFoundError("Account not found");
 
     const result = await ACCOUNT_MODELS.updateAccount(id, data);
-    if (!result) {
-      throw new NotFoundError("Account not found");
-    }
     return result;
   },
 
   deleteAccount: async (id) => {
-    const checkAccount = await prisma.bank_Accounts.findUnique({
-      where: { id },
-    });
+    const checkAccount = await ACCOUNT_MODELS.getDetailAccount(id);
 
     if (!checkAccount) {
       throw new NotFoundError("Account not found");

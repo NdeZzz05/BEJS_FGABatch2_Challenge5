@@ -2,8 +2,9 @@ const prisma = require("../config/prisma");
 const generateAccountNumber = require("../utils/generate_account_number");
 
 const ACCOUNT_MODELS = {
-  getAllAccount: async () => {
+  getAllAccount: async (where) => {
     const result = await prisma.bank_Accounts.findMany({
+      where,
       select: {
         id: true,
         bank_name: true,
@@ -52,6 +53,7 @@ const ACCOUNT_MODELS = {
         user_id,
       },
     });
+
     return result;
   },
 
@@ -70,6 +72,24 @@ const ACCOUNT_MODELS = {
 
   deleteAccount: async (id) => {
     const result = await prisma.bank_Accounts.delete({ where: { id } });
+    return result;
+  },
+
+  updateDecrementSourceAccount: async (data) => {
+    const { source_account_id, amount } = data;
+    const result = await prisma.bank_Accounts.update({
+      where: { id: source_account_id },
+      data: { balance: { decrement: amount } },
+    });
+    return result;
+  },
+
+  updateIncrementDestinationAccount: async (data) => {
+    const { destination_account_id, amount } = data;
+    const result = await prisma.bank_Accounts.update({
+      where: { id: destination_account_id },
+      data: { balance: { increment: amount } },
+    });
     return result;
   },
 };

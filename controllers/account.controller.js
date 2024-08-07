@@ -1,8 +1,10 @@
+const { BadRequest } = require("../errors/customsErrors");
 const ACCOUNT_SERVICES = require("../services/account.services");
+const VALIDATION_ACCOUNT = require("../validation/account.validation");
 
 getAllAccount = async (req, res, next) => {
   try {
-    const result = await ACCOUNT_SERVICES.getAllAccount();
+    const result = await ACCOUNT_SERVICES.getAllAccount(req.query);
     res.status(200).json({
       success: true,
       message: "All bank accounts fetched successfully",
@@ -31,9 +33,11 @@ getDetailAccount = async (req, res, next) => {
 
 createAccount = async (req, res, next) => {
   try {
-    const data = req.body;
+    const { error, value } = VALIDATION_ACCOUNT.createAccountValidation(req.body);
 
-    const result = await ACCOUNT_SERVICES.createAccount(data);
+    if (error) throw new BadRequest(error.details[0].message);
+
+    const result = await ACCOUNT_SERVICES.createAccount(value);
 
     res.status(201).json({
       success: true,
@@ -47,10 +51,12 @@ createAccount = async (req, res, next) => {
 
 updateAccount = async (req, res, next) => {
   try {
-    const { id } = req.params;
-    const data = req.body;
+    const { error, value } = VALIDATION_ACCOUNT.updateAccountValidation(req.body);
 
-    const result = await ACCOUNT_SERVICES.updateAccount(id, data);
+    if (error) throw new BadRequest(error.details[0].message);
+
+    const { id } = req.params;
+    const result = await ACCOUNT_SERVICES.updateAccount(id, value);
 
     res.status(200).json({
       success: true,

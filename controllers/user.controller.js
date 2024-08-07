@@ -1,8 +1,10 @@
+const { BadRequest } = require("../errors/customsErrors");
 const USER_SERVICES = require("../services/user.services");
+const createUserValidation = require("../validation/user.validation");
 
 getAllUser = async (req, res, next) => {
   try {
-    const result = await USER_SERVICES.getAllUser();
+    const result = await USER_SERVICES.getAllUser(req.query);
     res.status(200).json({
       success: true,
       message: "Users fetched successfully",
@@ -29,8 +31,11 @@ getDetailUser = async (req, res, next) => {
 
 createUser = async (req, res, next) => {
   try {
-    let data = req.body;
-    const result = await USER_SERVICES.createUser(data);
+    const { error, value } = createUserValidation(req.body);
+
+    if (error) throw new BadRequest(error.details[0].message);
+
+    const result = await USER_SERVICES.createUser(value);
     res.status(201).json({
       success: true,
       message: "User created successfully",
@@ -43,9 +48,12 @@ createUser = async (req, res, next) => {
 
 updateUser = async (req, res, next) => {
   try {
+    const { error, value } = createUserValidation(req.body);
+
+    if (error) throw new BadRequest(error.details[0].message);
+
     const { id } = req.params;
-    let data = req.body;
-    const result = await USER_SERVICES.updateUser(id, data);
+    const result = await USER_SERVICES.updateUser(id, value);
     res.status(200).json({
       success: true,
       message: "User updated successfully",

@@ -1,10 +1,10 @@
-const { BadRequest, NotFoundError } = require("../errors/customsErrors");
-const TRANSACTION_MODELS = require("../models/transaction.models");
+const { BadRequest } = require("../errors/customsErrors");
 const TRANSACTION_SERVICES = require("../services/transaction.services");
+const VALIDATION_TRANSACTION = require("../validation/transaction.validation");
 
 getAllTransaction = async (req, res, next) => {
   try {
-    const result = await TRANSACTION_SERVICES.getAllTransaction();
+    const result = await TRANSACTION_SERVICES.getAllTransaction(req.query);
     res.status(200).json({
       success: true,
       message: "Transactions fetched successfully",
@@ -31,21 +31,15 @@ getDetailTransaction = async (req, res, next) => {
 
 createTransfer = async (req, res, next) => {
   try {
-    const { amount, source_account_id, destination_account_id, transaction_type_id } = req.body;
-    if (!amount || !source_account_id || !destination_account_id) {
-      throw new BadRequest("Missing required fields");
-    }
+    const { error, value } = VALIDATION_TRANSACTION.createTransfer(req.body);
 
-    const result = await TRANSACTION_MODELS.createTransfer({
-      amount,
-      source_account_id,
-      destination_account_id,
-      transaction_type_id,
-    });
+    if (error) throw new BadRequest(error.details[0].message);
+
+    const result = await TRANSACTION_SERVICES.createTransfer(value);
 
     res.status(201).json({
       success: true,
-      message: "Transaction created successfully",
+      message: "Transfer created successfully",
       data: result,
     });
   } catch (error) {
@@ -55,12 +49,11 @@ createTransfer = async (req, res, next) => {
 
 createDeposit = async (req, res, next) => {
   try {
-    const { amount, destination_account_id, transaction_type_id } = req.body;
-    if (!amount || !destination_account_id) {
-      throw new BadRequest("Missing required fields");
-    }
+    const { error, value } = VALIDATION_TRANSACTION.createDeposit(req.body);
 
-    const result = await TRANSACTION_MODELS.createDeposit(amount, destination_account_id, transaction_type_id);
+    if (error) throw new BadRequest(error.details[0].message);
+
+    const result = await TRANSACTION_SERVICES.createDeposit(value);
 
     res.status(201).json({
       success: true,
@@ -74,9 +67,11 @@ createDeposit = async (req, res, next) => {
 
 createWithdraw = async (req, res, next) => {
   try {
-    const { amount, source_account_id, transaction_type_id } = req.body;
+    const { error, value } = VALIDATION_TRANSACTION.createWithdraw(req.body);
 
-    const result = await TRANSACTION_MODELS.createWithdraw(amount, source_account_id, transaction_type_id);
+    if (error) throw new BadRequest(error.details[0].message);
+
+    const result = await TRANSACTION_SERVICES.createWithdraw(value);
 
     res.status(201).json({
       success: true,

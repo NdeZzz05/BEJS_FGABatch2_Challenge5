@@ -1,10 +1,15 @@
-const prisma = require("../config/prisma");
 const { NotFoundError, BadRequest } = require("../errors/customsErrors");
 const USER_MODELS = require("../models/user.models");
 
 const USER_SERVICES = {
-  getAllUser: async () => {
-    const result = await USER_MODELS.getAllUser();
+  getAllUser: async (data) => {
+    const { name } = data;
+
+    const where = {};
+    if (name) {
+      where.name = { contains: name, mode: "insensitive" }; // 'contains' digunakan untuk pencarian parsial, 'mode: insensitive' untuk pencarian case-insensitive
+    }
+    const result = await USER_MODELS.getAllUser(where);
     return result;
   },
 
@@ -19,10 +24,6 @@ const USER_SERVICES = {
   },
 
   createUser: async (data) => {
-    if (!data.name || !data.email || !data.password || !data.identity_type || !data.identity_number || !data.street || !data.city || !data.state || !data.postal_code || !data.country || !data.company_name || !data.position) {
-      throw new BadRequest("Please fill in all the required fields");
-    }
-
     try {
       const result = await USER_MODELS.createUser(data);
       return result;
@@ -38,10 +39,6 @@ const USER_SERVICES = {
   },
 
   updateUser: async (id, data) => {
-    if (!data.name || !data.email || !data.password || !data.identity_type || !data.identity_number || !data.street || !data.city || !data.state || !data.postal_code || !data.country || !data.company_name || !data.position) {
-      throw new BadRequest("Please fill in all the required fields");
-    }
-
     try {
       const result = await USER_MODELS.updateUser(id, data);
 
@@ -52,7 +49,7 @@ const USER_SERVICES = {
       } else if (error.code === "P2002" && error.meta.target.includes("identity_number")) {
         throw new BadRequest("Identity number already exists");
       } else if (error.code === "P2025") {
-        throw new BadRequest("User not found");
+        throw new NotFoundError("User not found");
       }
 
       return error;
@@ -60,9 +57,8 @@ const USER_SERVICES = {
   },
 
   deleteUser: async (id) => {
-    const checkUser = await prisma.users.findUnique({
-      where: { id },
-    });
+    const checkUser = await USER_MODELS.getDetailUser(id);
+
     if (!checkUser) {
       throw new NotFoundError("User not found");
     }
