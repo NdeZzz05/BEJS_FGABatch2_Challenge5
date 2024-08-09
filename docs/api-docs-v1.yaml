@@ -6,6 +6,8 @@ info:
 servers:
   - url: http://localhost:3000/api/v1
 tags:
+  - name: auth
+    description: Authentication and authorization
   - name: users
     description: Everything about users
   - name: accounts
@@ -14,22 +16,20 @@ tags:
     description: Everything about transactions
 
 paths:
-  /users:
-    get:
+  /auth/register:
+    post:
       tags:
-        - users
-      summary: Get all users
-      parameters:
-        - in: query
-          name: name
-          example: "Fernandes"
-          schema:
-            type: string
-          description: |
-            * Filter by name users
+        - auth
+      summary: Auth register
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthRegis"
       responses:
-        "200":
-          description: A list of users
+        "201":
+          description: Account created
           content:
             application/json:
               schema:
@@ -38,9 +38,7 @@ paths:
                   - type: object
                     properties:
                       data:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/getUserResponse"
+                        $ref: "#/components/schemas/AuthRegisResponse"
         "400":
           description: Bad request
           content:
@@ -81,19 +79,21 @@ paths:
                 allOf:
                   - $ref: "#/components/schemas/ErrorResponse500"
                   - type: object
+
+  /auth/login:
     post:
       tags:
-        - users
-      summary: Create a new user
+        - auth
+      summary: Auth login
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserInput"
+              $ref: "#/components/schemas/AuthLogin"
       responses:
         "201":
-          description: User created
+          description: Account created
           content:
             application/json:
               schema:
@@ -102,7 +102,77 @@ paths:
                   - type: object
                     properties:
                       data:
-                        $ref: "#/components/schemas/createUserResponse"
+                        $ref: "#/components/schemas/AuthLoginResponse"
+                      accessToken:
+                        $ref: "#/components/schemas/AuthLoginResponseToken"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse400"
+                  - type: object
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse401"
+                  - type: object
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse403"
+                  - type: object
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse404"
+                  - type: object
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/ErrorResponse500"
+                  - type: object
+
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get all users
+      parameters:
+        - in: query
+          name: name
+          example: "Fernandes"
+          schema:
+            type: string
+          description: |
+            * Filter by name users
+      responses:
+        "200":
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/basicResponse"
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/getUserResponse"
         "400":
           description: Bad request
           content:
@@ -1110,6 +1180,73 @@ components:
         email:
           type: string
           example: "bagus@gmail.com"
+
+    AuthRegis:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Muhammad Fernandes
+        email:
+          type: string
+          example: nandes@gmail.com
+        password:
+          type: string
+          example: orangganteng
+      required:
+        - name
+        - email
+        - password
+    AuthRegisResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 53a77032-9b6d-497e-9eff-6e0450ce5bd2
+        name:
+          type: string
+          example: Muhammad Fernandes
+        email:
+          type: string
+          example: nandes@gmail.com
+        password:
+          type: string
+          example: $2b$10$rfrpWjFqzpUzy00ueqguw.YG4NU09pMsPs0sfgZy9OH1bpFPphZm
+        role:
+          type: string
+          example: ADMIN
+
+    AuthLogin:
+      type: object
+      properties:
+        email:
+          type: string
+          example: nandes@gmail.com
+        password:
+          type: string
+          example: orangganteng
+      required:
+        - email
+        - password
+
+    AuthLoginResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 53a77032-9b6d-497e-9eff-6e0450ce5bd2
+        email:
+          type: string
+          example: nandes@gmail.com
+        password:
+          type: string
+          example: $2b$10$rfrpWjFqzpUzy00ueqguw.YG4NU09pMsPs0sfgZy9OH1bpFPphZm
+        role:
+          type: string
+          example: ADMIN
+    AuthLoginResponseToken:
+      type: string
+      example: 53a77032-9b6d-497e-9eff-6e0450ce5bd2
 
     createUserResponse:
       type: object

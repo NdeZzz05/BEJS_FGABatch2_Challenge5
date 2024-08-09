@@ -1,4 +1,4 @@
-const { NotFoundError, BadRequest } = require("../errors/customsErrors");
+const { NotFoundError } = require("../errors/customsErrors");
 const ACCOUNT_MODELS = require("../models/account.models");
 const USER_MODELS = require("../models/user.models");
 

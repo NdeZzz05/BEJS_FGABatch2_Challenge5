@@ -10,7 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url = env("DATABASE_URL")
 }
 
 model Users {
@@ -20,6 +20,7 @@ model Users {
   password String
   profile Profiles? 
   bank_accounts Bank_Accounts[]
+  role    Role @default(USER)
 }
 
 model Profiles {
@@ -86,4 +87,9 @@ enum IdentityType {
   SIM
   PASSPORT
   STUDENT_CARD
+}
+
+enum Role {
+  USER
+  ADMIN
 }

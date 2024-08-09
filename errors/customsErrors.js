@@ -6,6 +6,21 @@ class BadRequest extends Error {
   }
 }
 
+class UnauthorizedError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = 401;
+    this.name = this.constructor.name;
+  }
+}
+
+class ForbiddenError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = 403;
+    this.name = this.constructor.name;
+  }
+}
 class NotFoundError extends Error {
   constructor(message) {
     super(message);
@@ -14,4 +29,12 @@ class NotFoundError extends Error {
   }
 }
 
-module.exports = { BadRequest, NotFoundError };
+class InternalServerError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = 500;
+    this.name = this.constructor.name;
+  }
+}
+
+module.exports = { BadRequest, UnauthorizedError, ForbiddenError, NotFoundError, InternalServerError };

@@ -23,36 +23,24 @@ const USER_SERVICES = {
     return result;
   },
 
-  createUser: async (data) => {
-    try {
-      const result = await USER_MODELS.createUser(data);
-      return result;
-    } catch (error) {
-      if (error.code === "P2002" && error.meta.target.includes("email")) {
-        throw new BadRequest("Email already exists");
-      } else if (error.code === "P2002" && error.meta.target.includes("identity_number")) {
-        throw new BadRequest("Identity number already exists");
-      }
-
-      return error;
-    }
-  },
-
   updateUser: async (id, data) => {
     try {
-      const result = await USER_MODELS.updateUser(id, data);
+      const checkUser = await USER_MODELS.getDetailUser(id);
 
-      return result;
-    } catch (error) {
-      if (error.code === "P2002" && error.meta.target.includes("email")) {
-        throw new BadRequest("Email already exists");
-      } else if (error.code === "P2002" && error.meta.target.includes("identity_number")) {
-        throw new BadRequest("Identity number already exists");
-      } else if (error.code === "P2025") {
+      if (!checkUser) {
         throw new NotFoundError("User not found");
       }
 
-      return error;
+      const result = await USER_MODELS.updateUserProfile(id, data);
+
+      return result;
+    } catch (error) {
+      if (error.code === "P2002" && error.meta.target.includes("email")) {
+        throw new BadRequest("Email already exists");
+      } else if (error.code === "P2002" && error.meta.target.includes("identity_number")) {
+        throw new BadRequest("Identity number already exists");
+      }
+      throw error;
     }
   },
 

@@ -29,29 +29,11 @@ getDetailUser = async (req, res, next) => {
   }
 };
 
-createUser = async (req, res, next) => {
-  try {
-    const { error, value } = createUserValidation(req.body);
-
-    if (error) throw new BadRequest(error.details[0].message);
-
-    const result = await USER_SERVICES.createUser(value);
-    res.status(201).json({
-      success: true,
-      message: "User created successfully",
-      data: result,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
 updateUser = async (req, res, next) => {
   try {
     const { error, value } = createUserValidation(req.body);
 
     if (error) throw new BadRequest(error.details[0].message);
-
     const { id } = req.params;
     const result = await USER_SERVICES.updateUser(id, value);
     res.status(200).json({
@@ -77,4 +59,4 @@ deleteUser = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllUser, getDetailUser, createUser, updateUser, deleteUser };
+module.exports = { getAllUser, getDetailUser, updateUser, deleteUser };

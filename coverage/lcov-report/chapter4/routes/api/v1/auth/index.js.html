@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for chapter4/routes/api/v1/account/index.js</title>
+    <title>Code coverage report for chapter4/routes/api/v1/auth/index.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../../index.html">All files</a> / <a href="index.html">chapter4/routes/api/v1/account</a> index.js</h1>
+        <h1><a href="../../../../../index.html">All files</a> / <a href="index.html">chapter4/routes/api/v1/auth</a> index.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">94.73% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/14</span>
+                <span class='fraction'>18/19</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">94.73% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/14</span>
+                <span class='fraction'>18/19</span>
             </div>
         
             
@@ -77,10 +77,20 @@
 <a name='L12'></a><a href='#L12'>12</a>
 <a name='L13'></a><a href='#L13'>13</a>
 <a name='L14'></a><a href='#L14'>14</a>
-<a name='L15'></a><a href='#L15'>15</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -94,15 +104,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">var express = require("express");
 var router = express.Router();
 &nbsp;
-const ACCOUNT_CONTROLLER = require("../../../../controllers/account.controller");
+const AUTH_CONTROLLER = require("../../../../controllers/auth.controller");
 const AuthMiddleware = require("../../../../middleware/authentication.middleware");
-const { adminAccess } = require("../../../../middleware/authorization.middleware");
+const passport = require("passport");
 &nbsp;
-router.get("/", AuthMiddleware, adminAccess, ACCOUNT_CONTROLLER.getAllAccount);
-router.get("/:id", AuthMiddleware, ACCOUNT_CONTROLLER.getDetailAccount);
-router.post("/", ACCOUNT_CONTROLLER.createAccount);
-router.put("/:id", ACCOUNT_CONTROLLER.updateAccount);
-router.delete("/:id", ACCOUNT_CONTROLLER.deleteAccount);
+router.get("/register", (req, res) =&gt; {
+<span class="cstat-no" title="statement not covered" >  res.render("register.ejs", { message: {} });</span>
+});
+router.post("/register", AUTH_CONTROLLER.postRegister);
+&nbsp;
+router.post("/login", AUTH_CONTROLLER.login);
+router.get("/whoami", AuthMiddleware, AUTH_CONTROLLER.whoami);
+&nbsp;
+router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+router.get("/google/callback", passport.authenticate("google", { failureRedirect: "/auth/redirect", session: false }), AUTH_CONTROLLER.LoginWithGoogle);
 &nbsp;
 module.exports = router;
 &nbsp;</pre></td></tr></table></pre>

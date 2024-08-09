@@ -20,7 +20,7 @@ describe("Transactions API", () => {
     });
   });
 
-  //   Transfer
+  //  Transfer
   describe("POST /api/v1/transactions/transfer", () => {
     it("transfer: should create a new Transactions Transfer", async () => {
       const newTransactions = {
@@ -34,6 +34,7 @@ describe("Transactions API", () => {
       expect(response.body.success).toBe(true);
       expect(response.body.data).toHaveProperty("id");
       createdTransactionsId = response.body.data.id;
+      expect(response.error.message).toBe("Source account not found");
     });
 
     it("transfer: should return validation error when source account not found", async () => {
