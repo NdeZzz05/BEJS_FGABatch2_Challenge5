@@ -1,5 +1,6 @@
 const request = require("supertest");
 const app = require("../app");
+const data = require("./data");
 
 describe("Account API", () => {
   let createAccountId;
@@ -62,7 +63,7 @@ describe("Account API", () => {
         user_id: "user_not_found",
       };
 
-      const response = await request(app).post("/api/v1/accounts").send(newAccounts);
+      const response = await request(app).post("/api/v1/accounts").send(newAccounts).set("Authorization", `Bearer ${data.token}`);
 
       expect(response.statusCode).toBe(400);
       expect(response.body.success).toBe(false);
@@ -77,7 +78,7 @@ describe("Account API", () => {
         user_id: "user_not_found",
       };
 
-      const response = await request(app).post("/api/v1/accounts").send(newAccounts);
+      const response = await request(app).post("/api/v1/accounts").send(newAccounts).set("Authorization", `Bearer ${data.token}`);
 
       expect(response.statusCode).toBe(400);
       expect(response.body.success).toBe(false);
@@ -88,7 +89,7 @@ describe("Account API", () => {
   //Get Details
   describe("GET /api/v1/accounts/:id", () => {
     it("should return accounts details", async () => {
-      const response = await request(app).get(`/api/v1/accounts/${createAccountId}`);
+      const response = await request(app).get(`/api/v1/accounts/${createAccountId}`).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(200);
       expect(response.body.success).toBe(true);
       expect(response.body.data).toHaveProperty("id", createAccountId);
@@ -96,7 +97,7 @@ describe("Account API", () => {
 
     it("should return validation errors when get detail account because account not fount", async () => {
       const noAccountId = "non-existing-id";
-      const response = await request(app).get(`/api/v1/accounts/${noAccountId}`);
+      const response = await request(app).get(`/api/v1/accounts/${noAccountId}`).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(404);
       expect(response.body.success).toBe(false);
       expect(response.body.error.message).toBe("Account not found");
@@ -110,7 +111,7 @@ describe("Account API", () => {
         bank_name: "Fernandes Ahmad",
         pin: "123456",
       };
-      const response = await request(app).put(`/api/v1/accounts/${createAccountId}`).send(updatedAccounts);
+      const response = await request(app).put(`/api/v1/accounts/${createAccountId}`).send(updatedAccounts).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(200);
       expect(response.body.success).toBe(true);
       expect(response.body.data).toHaveProperty("bank_name", "Fernandes Ahmad");
@@ -122,7 +123,7 @@ describe("Account API", () => {
         bank_name: "Fernandes Ahmad",
         pin: "123456",
       };
-      const response = await request(app).put(`/api/v1/accounts/${noAccountId}`).send(updatedAccounts);
+      const response = await request(app).put(`/api/v1/accounts/${noAccountId}`).send(updatedAccounts).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(404);
       expect(response.body.success).toBe(false);
       expect(response.body.error.message).toBe("Account not found");
@@ -133,7 +134,7 @@ describe("Account API", () => {
         bank_name: "",
         pin: "123456",
       };
-      const response = await request(app).put(`/api/v1/accounts/${createAccountId}`).send(updatedAccounts);
+      const response = await request(app).put(`/api/v1/accounts/${createAccountId}`).send(updatedAccounts).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(400);
       expect(response.body.success).toBe(false);
       expect(response.body.error.message).toBe('"bank_name" is not allowed to be empty');
@@ -143,7 +144,7 @@ describe("Account API", () => {
   //Delete
   describe("DELETE /api/v1/accounts/:id", () => {
     it("should delete the account", async () => {
-      const response = await request(app).delete(`/api/v1/accounts/${createAccountId}`);
+      const response = await request(app).delete(`/api/v1/accounts/${createAccountId}`).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(200);
       expect(response.body.success).toBe(true);
       expect(response.body.message).toBe("Account deleted successfully");
@@ -151,7 +152,7 @@ describe("Account API", () => {
 
     it("should return validation errors when delete account because account not found", async () => {
       const noAccountId = "non-existing-id";
-      const response = await request(app).delete(`/api/v1/accounts/${noAccountId}`);
+      const response = await request(app).delete(`/api/v1/accounts/${noAccountId}`).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(404);
       expect(response.body.success).toBe(false);
       expect(response.body.error.message).toBe("Account not found");

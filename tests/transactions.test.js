@@ -1,11 +1,11 @@
 const request = require("supertest");
 const app = require("../app");
-
+const data = require("./data");
 describe("Transactions API", () => {
   // Test case for getting all transactions
   describe("GET /api/v1/transactions", () => {
     it("Get all transactions", async () => {
-      const response = await request(app).get("/api/v1/transactions");
+      const response = await request(app).get("/api/v1/transactions").set("Authorization", `Bearer ${data.token}`);
       expect(response.status).toBe(200);
       expect(response.body.success).toBe(true);
       expect(Array.isArray(response.body.data)).toBe(true);
@@ -13,7 +13,7 @@ describe("Transactions API", () => {
 
     // error resource not found
     it("should return validation errors when resource not found", async () => {
-      const response = await request(app).get("/api/v1/transaction");
+      const response = await request(app).get("/api/v1/transaction").set("Authorization", `Bearer ${data.token}`);
       expect(response.status).toBe(404);
       expect(response.body.success).toBe(false);
       expect(response.body.error.message).toBe("Resource not found");
@@ -29,7 +29,7 @@ describe("Transactions API", () => {
         destination_account_id: "0f51d32a-4af1-4f10-959b-f408ae5c77b3",
         transaction_type_id: "09ff41b2-fa86-4393-bbf2-f3d81f72fc17",
       };
-      const response = await request(app).post("/api/v1/transactions/transfer").send(newTransactions);
+      const response = await request(app).post("/api/v1/transactions/transfer").send(newTransactions).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(201);
       expect(response.body.success).toBe(true);
       expect(response.body.data).toHaveProperty("id");
@@ -45,7 +45,7 @@ describe("Transactions API", () => {
         destination_account_id: "0f51d32a-4af1-4f10-959b-f408ae5c77b3",
         transaction_type_id: "09ff41b2-fa86-4393-bbf2-f3d81f72fc17",
       };
-      const response = await request(app).post("/api/v1/transactions/transfer").send(newTransactions);
+      const response = await request(app).post("/api/v1/transactions/transfer").send(newTransactions).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(404);
       expect(response.body.success).toBe(false);
       expect(response.body.error.message).toBe("Source account not found");
@@ -60,7 +60,7 @@ describe("Transactions API", () => {
         destination_account_id: "0f51d32a-4af1-4f10-959b-f408ae5c77b3",
         transaction_type_id: "2248641e-7c80-421c-b458-a9ac62dc20fa",
       };
-      const response = await request(app).post("/api/v1/transactions/deposit").send(newTransactions);
+      const response = await request(app).post("/api/v1/transactions/deposit").send(newTransactions).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(201);
       expect(response.body.success).toBe(true);
       expect(response.body.data).toHaveProperty("id");
@@ -73,7 +73,7 @@ describe("Transactions API", () => {
         destination_account_id: noDestinationAccount,
         transaction_type_id: "09ff41b2-fa86-4393-bbf2-f3d81f72fc17",
       };
-      const response = await request(app).post("/api/v1/transactions/deposit").send(newTransactions);
+      const response = await request(app).post("/api/v1/transactions/deposit").send(newTransactions).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(404);
       expect(response.body.success).toBe(false);
       expect(response.body.error.message).toBe("Destination account not found");
@@ -88,7 +88,7 @@ describe("Transactions API", () => {
         source_account_id: "0f51d32a-4af1-4f10-959b-f408ae5c77b3",
         transaction_type_id: "bef1c4e5-fba2-4d2d-bf8e-98c6bfd59e16",
       };
-      const response = await request(app).post("/api/v1/transactions/withdraw").send(newTransactions);
+      const response = await request(app).post("/api/v1/transactions/withdraw").send(newTransactions).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(201);
       expect(response.body.success).toBe(true);
       expect(response.body.data).toHaveProperty("id");
@@ -101,7 +101,7 @@ describe("Transactions API", () => {
         source_account_id: noSourceAccount,
         transaction_type_id: "bef1c4e5-fba2-4d2d-bf8e-98c6bfd59e16",
       };
-      const response = await request(app).post("/api/v1/transactions/withdraw").send(newTransactions);
+      const response = await request(app).post("/api/v1/transactions/withdraw").send(newTransactions).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(404);
       expect(response.body.success).toBe(false);
       expect(response.body.error.message).toBe("Source account not found");
@@ -113,7 +113,7 @@ describe("Transactions API", () => {
         source_account_id: "0f51d32a-4af1-4f10-959b-f408ae5c77b3",
         transaction_type_id: "bef1c4e5-fba2-4d2d-bf8e-98c6bfd59e16",
       };
-      const response = await request(app).post("/api/v1/transactions/withdraw").send(newTransactions);
+      const response = await request(app).post("/api/v1/transactions/withdraw").send(newTransactions).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(400);
       expect(response.body.success).toBe(false);
       expect(response.body.error.message).toBe('"amount" must be a positive number');
@@ -123,7 +123,7 @@ describe("Transactions API", () => {
   //Get Details Transfer
   describe("GET /api/v1/transactions/:id", () => {
     it("should return Transactions details", async () => {
-      const response = await request(app).get(`/api/v1/transactions/${createdTransactionsId}`);
+      const response = await request(app).get(`/api/v1/transactions/${createdTransactionsId}`).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(200);
       expect(response.body.success).toBe(true);
       expect(response.body.data).toHaveProperty("id", createdTransactionsId);
@@ -131,7 +131,7 @@ describe("Transactions API", () => {
 
     it("should return validation error when transaction transfer id not found", async () => {
       const noTransferId = "no-transfer-id";
-      const response = await request(app).get(`/api/v1/transactions/${noTransferId}`);
+      const response = await request(app).get(`/api/v1/transactions/${noTransferId}`).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(404);
       expect(response.body.success).toBe(false);
       expect(response.body.error.message).toBe("Detail transaction not found");

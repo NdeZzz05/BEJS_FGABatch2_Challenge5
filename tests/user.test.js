@@ -1,12 +1,12 @@
 const request = require("supertest");
 const app = require("../app");
-
+const data = require("./data");
 describe("User API", () => {
   let createdUserId;
 
   describe("GET /api/v1/users", () => {
     it("should return a list of users", async () => {
-      const response = await request(app).get("/api/v1/users");
+      const response = await request(app).get("/api/v1/users").set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(200);
       expect(response.body.success).toBe(true);
       expect(Array.isArray(response.body.data)).toBe(true);
@@ -14,7 +14,7 @@ describe("User API", () => {
 
     // Tes case - Resource not found
     it("should return a list of user", async () => {
-      const response = await request(app).get("/api/v1/user");
+      const response = await request(app).get("/api/v1/user").set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(404);
       expect(response.body.success).toBe(false);
       expect(response.body.error.message).toBe("Resource not found");
@@ -25,7 +25,7 @@ describe("User API", () => {
   describe("GET /api/v1/users/:id", () => {
     it("should return user details", async () => {
       const UserId = "fa643de1-3873-4a29-995e-8b96dc600f1c";
-      const response = await request(app).get(`/api/v1/users/${UserId}`);
+      const response = await request(app).get(`/api/v1/users/${UserId}`).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(200);
       expect(response.body.success).toBe(true);
       expect(response.body.data).toHaveProperty("id", UserId);
@@ -33,7 +33,7 @@ describe("User API", () => {
 
     it("should return no user details", async () => {
       const noUserId = "non-existing-id";
-      const response = await request(app).get(`/api/v1/users/${noUserId}`);
+      const response = await request(app).get(`/api/v1/users/${noUserId}`).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(404);
       expect(response.body.success).toBe(false);
       expect(response.body.error.message).toBe("User not found");
@@ -59,7 +59,7 @@ describe("User API", () => {
         position: "Other Position",
       };
 
-      const response = await request(app).put(`/api/v1/users/${UserId}`).send(updatedUser);
+      const response = await request(app).put(`/api/v1/users/${UserId}`).send(updatedUser).set("Authorization", `Bearer ${data.token}`);
 
       expect(response.statusCode).toBe(200);
       expect(response.body.success).toBe(true);
@@ -82,7 +82,7 @@ describe("User API", () => {
         position: "Other Position",
       };
       const noUserId = "id";
-      const response = await request(app).put(`/api/v1/users/${noUserId}`).send(updatedUser);
+      const response = await request(app).put(`/api/v1/users/${noUserId}`).send(updatedUser).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(404);
       expect(response.body.success).toBe(false);
       expect(response.body.error.message).toBe("User not found");
@@ -93,7 +93,7 @@ describe("User API", () => {
   describe("DELETE /api/v1/users/:id", () => {
     it("should return no user DELETE because user not found", async () => {
       const noUserId = "non-existing-id";
-      const response = await request(app).del(`/api/v1/users/${noUserId}`);
+      const response = await request(app).del(`/api/v1/users/${noUserId}`).set("Authorization", `Bearer ${data.token}`);
       expect(response.statusCode).toBe(404);
       expect(response.body.success).toBe(false);
       expect(response.body.error.message).toBe("User not found");

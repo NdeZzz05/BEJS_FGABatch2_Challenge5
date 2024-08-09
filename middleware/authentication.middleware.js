@@ -13,6 +13,7 @@ const AuthMiddleware = async (req, res, next) => {
 
     const decoded = await decodeToken(TOKEN_VALUE, JWT_SECRET_KEY);
     req.user = decoded;
+
     next();
   } catch (error) {
     return res.status(401).json({ message: "Invalid token" });
